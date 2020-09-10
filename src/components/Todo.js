@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Todo.css'
 
 //? component for each individual task
@@ -24,6 +24,7 @@ function Task({ task, index, completeTask, removeTask }) {
 //? second being a function that can be used to update the tasks
 
 function Todo() {
+  const [tasksRemaining, setTasksRemaining] = useState(0)
   const [tasks, setTasks] = useState([
     {
       title: "Grab some pizza",
@@ -38,6 +39,12 @@ function Todo() {
       completed: false
     }
   ])
+
+  //? Effect hook to update the state of tasksRemaining when the DOM re-renders
+
+  useEffect(() => {
+    setTasksRemaining(tasks.filter(task => !task.completed).length)
+  }, [tasks])
 
   //? Method to handle adding new tasks
   //? uses spead operator and destructuring to push a new object into to the tasks state
@@ -65,7 +72,7 @@ function Todo() {
 
   return (
     <div className="todo-container">
-      <div className="header">TODO - ITEMS</div>
+      <div className="header">Pending tasks ({tasksRemaining})</div>
       <div className="tasks">
         {tasks.map((task, index) => (
           <Task
