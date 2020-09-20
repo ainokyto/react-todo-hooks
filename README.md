@@ -1,5 +1,7 @@
 # React Todo Hooks
 
+![React Todo Hooks](./src/readme_assets/app.png)
+
 A simple frontend Todo app built with React, leveraging the React Hooks API. The objective for this project was to educate myself about the React Hooks API.
 
 ## Getting started
@@ -54,7 +56,7 @@ function Todo() {
   ])
 ```
 
-The methods `addTask`, `completeTask` and `removeTask` handle the adding, completing and removing of each task. They're being defined within the `Todo` component and being passed as props to the `Task` component, which in turn is being called for each individual task in the JSX of `Todo` component:
+The methods `addTask`, `completeTask` and `removeTask` handle the adding, completing and removing of each task. They're being defined within the `Todo` component and being passed as props to the `Task` component, which in turn is being called for each individual task in the JSX of `Todo` component, where an instance of the `Task` component is being returned for each element in the tasks array:
 
 ```javascript
   return (
