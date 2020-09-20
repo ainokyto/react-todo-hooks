@@ -1,68 +1,96 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React Todo Hooks
 
-## Available Scripts
+A simple frontend Todo app built with React, leveraging the React Hooks API. The objective for this project was to educate myself about the React Hooks API.
 
-In the project directory, you can run:
+## Getting started
 
-### `yarn start`
+### Git Clone
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+To clone the code on your machine and run the program in your local environment, click the Code button above. After downloading it with HTTPS or SSH, run `yarn` in the root level to install dependencies, and `yarn start` to start the server.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Technologies used
+* React
+* React Hooks API
+* JSX
+* Yarn
 
-### `yarn test`
+## Components
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+I started by writing the `Task` component, which will be called for each instance of a task on the todo. The `Task` component returns some JSX to define what each task element will look like: 
 
-### `yarn build`
+```javascript
+function Task({ task, index, completeTask, removeTask }) { //? props being passed in Todo JSX
+  return (
+    <div
+      className="task"
+      style={{ textDecoration: task.completed ? "line-through" : "" }} //? inline style for task completion
+    >
+      {task.title}
+      <button style={{ background: "red" }} onClick={() => removeTask(index)}>x</button>
+      <button onClick={() => completeTask(index)}>Complete</button>
+    </div>
+  )
+}
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+In the `Todo` component, the `useState` function returns an array with two elements. The first item being the current state value for the tasks and the second being a function that can be used to update the tasks. These are hard coded in to populate the `Todo` but could naturally be updated dynamically. Another instance of `useState`is also used to monitor the amount of incomplete tasks remaining - a new state Hook is registered for the pending tasks in the `Todo` component to update the number of pending tasks whenever the DOM is re-rendered:
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```javascript
+function Todo() {
+  const [tasksRemaining, setTasksRemaining] = useState(0) //* Effect hook to update the state of tasksRemaining when the DOM re-renders
+  const [tasks, setTasks] = useState([
+    {
+      title: "Grab some pizza",
+      completed: true
+    },
+    {
+      title: "Exercise",
+      completed: true
+    },
+    {
+      title: "Chill with mates",
+      completed: false
+    }
+  ])
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The methods `addTask`, `completeTask` and `removeTask` handle the adding, completing and removing of each task. They're being defined within the `Todo` component and being passed as props to the `Task` component, which in turn is being called for each individual task in the JSX of `Todo` component:
 
-### `yarn eject`
+```javascript
+  return (
+    <div className="todo-container">
+      <div className="header">Pending tasks ({tasksRemaining})</div>
+      <div className="tasks">
+        {tasks.map((task, index) => (
+          <Task
+            task={task}
+            index={index}
+            completeTask={completeTask}
+            removeTask={removeTask}
+            key={index}
+          />
+        ))}
+      </div>
+      <div className="create-task" >
+          <CreateTask addTask={addTask} />
+      </div>
+    </div>
+  )
+  ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Adding a new task happens in the `CreateTask` component. It includes the `handleSubmit` method that handles the form input being created into a new task. `handleSubmit` receives `addTask` as a prop, the input value is being passed down as a prop to `addTask` in order to create a new task to the todo. Finally `CreateTask` returns some JSX where the user can add a new task:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```javascript
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        className="input"
+        value={value}
+        placeholder="Add a new task"
+        onChange={e => setValue(e.target.value)}
+      />
+    </form>
+  )
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

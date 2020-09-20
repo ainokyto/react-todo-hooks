@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import './Todo.css'
+import './App.css'
 
-//? component for each individual task
 
-function Task({ task, index, completeTask, removeTask }) {
+//? Task Component for each individual task
+
+function Task({ task, index, completeTask, removeTask }) { //? props being passed in Todo JSX
   return (
     <div
       className="task"
-      style={{ textDecoration: task.completed ? "line-through" : "" }}
+      style={{ textDecoration: task.completed ? "line-through" : "" }} //? inline style for task completion
     >
       {task.title}
       <button style={{ background: "red" }} onClick={() => removeTask(index)}>x</button>
@@ -16,15 +17,17 @@ function Task({ task, index, completeTask, removeTask }) {
   )
 }
 
-//? Component to handle completing tasks and adding new ones 
+//? Todo Component to handle completing tasks and adding new ones 
 
 //? useState returns an array with two elements
-//? first item, tasks object, being the current state value for the tasks
+
+//? first item, the tasks object, being the current state value for the tasks
   //? two key-value pairs, one for title and the other for completion
+
 //? second being a function that can be used to update the tasks
 
 function Todo() {
-  const [tasksRemaining, setTasksRemaining] = useState(0)
+  const [tasksRemaining, setTasksRemaining] = useState(0) //* Effect hook to update the state of tasksRemaining when the DOM re-renders
   const [tasks, setTasks] = useState([
     {
       title: "Grab some pizza",
@@ -40,7 +43,7 @@ function Todo() {
     }
   ])
 
-  //? Effect hook to update the state of tasksRemaining when the DOM re-renders
+  //* Effect hook to update the state of tasksRemaining when the DOM re-renders
 
   useEffect(() => {
     setTasksRemaining(tasks.filter(task => !task.completed).length)
@@ -84,19 +87,19 @@ function Todo() {
           />
         ))}
       </div>
-      <div classname="create-task" >
+      <div className="create-task" >
           <CreateTask addTask={addTask} />
       </div>
     </div>
   )
 }
 
-function CreateTask({ addTask }) { // receives a prop addTask, a function that adds a new task to the tasks state
+function CreateTask({ addTask }) { // receives addTask method as prop
   const [value, setValue] = useState('')
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    if (!value) return
+  const handleSubmit = event => {
+    event.preventDefault()
+    if (!value) return null
 
     addTask(value) // event handler adds a new task using the latest value that's in the input field
     setValue('')
@@ -109,7 +112,7 @@ function CreateTask({ addTask }) { // receives a prop addTask, a function that a
         className="input"
         value={value}
         placeholder="Add a new task"
-        onChange={e => setValue(e.target.value)}
+        onChange={event => setValue(event.target.value)}
       />
     </form>
   )
