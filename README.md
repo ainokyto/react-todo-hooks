@@ -96,3 +96,6 @@ Adding a new task happens in the `CreateTask` component. It includes the `handle
   )
 ```
 
+## Future improvements
+
+* Responsive design
